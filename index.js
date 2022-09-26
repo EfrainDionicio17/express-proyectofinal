@@ -9,9 +9,9 @@ const { pokemon } = require('./pokedex.json');
 /*
 Verbos HTTP: denotan una acción
 GET: Para obtener un recurso
-POST: Guardar datos
-PATCH: Actualizar un dato de un recurso (registro: cualquier registro en una base de datos)
-PUT: Actualizar todos los datos
+POST: Guardar/almacencar/guardar un recurso
+PATCH: Actualizar un dato de un recurso (registro: cualquier registro en una base de datos), modificar una parte de un recurso.
+PUT: Actualizar todos los datos,
 DElETE: Eliminar un recurso o registro
 */
 
@@ -21,16 +21,14 @@ app.get("/", (req, res, next) =>{
   //res respuesta clase objeto a la petición
 
   //const pokemon = pokedex.pokemon;
-  res.status(200); //
-  res.send("Bienvenido al Pokedex");
+  res.status(200).send("Bienvenido al Pokedex");
 
 });
 
-app.get('/pokemon/all', (req, res, next) =>{
+app.get('/pokemon', (req, res, next) =>{
 
   //console.log(req.params.name);
-  res.status(200);
-  res.send(pokemon);
+  return res.status(200).send(pokemon);
 
 });
 
@@ -39,30 +37,38 @@ app.get('/pokemon/:id([0-9]{1,3})', (req, res, next) =>{
   const id = req.params.id - 1;
   if(id >= 0 && id <= 150){
 
-      res.status(200);
-      return res.send(pokemon[req.params.id - 1]);
+      return res.status(200).send(pokemon[req.params.id - 1]);
 
   }
 
-    res.status(404);
-    res.send("Pokémon no encontrado.")
+    res.status(404).send("Pokémon no encontrado.");
 
 });
 
-app.get('/pokemon/:name', (req, res, next) =>{
+app.get('/pokemon/:name([A-Za-z]+)', (req, res, next) =>{
+
+
+  /*for (i=0; i<pokemon.length; i++){
+    if(pokemon[i].name.toUpperCase() == name.toUpperCase()){
+
+      return res.status(200).send(pokemon[i]);
+
+    };
+
+  };*/
+
+  //Operador ternario if = condicion ? valor si verdadero : valor si falso
+
   const name = req.params.name;
-for (i=0; i<pokemon.length; i++){
-  if(pokemon[i].name==name){
 
-    res.status(200);
-    res.send(pokemon[i]);
+  const pk = pokemon.filter((p) => {
 
-  };
+    return (p.name.toUpperCase() == name.toUpperCase()) ? p : null;
 
-};
+  });
 
-    res.status(404);
-    res.send("Pokémon no encontrado.")
+  return (pk.length>0) ? res.status(200).send(pk) : res.status(404).send('Pokémon no encontrado');
+
 
 });
 
