@@ -43,10 +43,8 @@ app.get('/pokemon', (req, res, next) =>{
 });
 
 app.get('/pokemon/:id([0-9]{1,3})', (req, res, next) =>{
-
   const id = req.params.id - 1;
   if(id >= 0 && id <= 150){
-
       return res.status(200).send(pokemon[req.params.id - 1]);
 
   }
