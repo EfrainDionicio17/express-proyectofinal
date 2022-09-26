@@ -2,9 +2,13 @@
 let y = 0; //y y z si pueden cambiar
 var z = ;*/
 
+const bodyParser = require('body-parser');
 const express = require('express'); //require es para importar
 const app = express();
 const { pokemon } = require('./pokedex.json');
+
+app.use(express.json());
+app.use(express.urlencoded({ extended:true }));
 
 /*
 Verbos HTTP: denotan una acción
@@ -22,6 +26,12 @@ app.get("/", (req, res, next) =>{
 
   //const pokemon = pokedex.pokemon;
   res.status(200).send("Bienvenido al Pokedex");
+
+});
+
+app.post("/pokemon", (req,res,next)=>{
+
+  return res.status(200).send(req.body);
 
 });
 
@@ -47,7 +57,6 @@ app.get('/pokemon/:id([0-9]{1,3})', (req, res, next) =>{
 
 app.get('/pokemon/:name([A-Za-z]+)', (req, res, next) =>{
 
-
   /*for (i=0; i<pokemon.length; i++){
     if(pokemon[i].name.toUpperCase() == name.toUpperCase()){
 
@@ -63,7 +72,7 @@ app.get('/pokemon/:name([A-Za-z]+)', (req, res, next) =>{
 
   const pk = pokemon.filter((p) => {
 
-    return (p.name.toUpperCase() == name.toUpperCase()) ? p : null;
+    return (p.name.toUpperCase() == name.toUpperCase()) && p;
 
   });
 
