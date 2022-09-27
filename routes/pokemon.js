@@ -1,6 +1,6 @@
 const express = require('express');
 const pokemon = express.Router();
-const pk = require('../pokedex.json').pokemon;
+const db = require('../config/database');
 
 pokemon.post("/", (req,res,next)=>{
 
@@ -8,25 +8,31 @@ pokemon.post("/", (req,res,next)=>{
 
 });
 
-pokemon.get('/', (req, res, next) =>{
+pokemon.get('/', async (req, res, next) =>{
 
-  //console.log(pk);
-  return res.status(200).send(pk);
+  const pkmn = await db.query("SELECT * FROM pokemon");
+  console.log(pkmn);
+  return res.status(200).json(pkmn);
 
 });
 
-pokemon.get('/:id([0-9]{1,3})', (req, res, next) =>{
-  const id = req.params.id - 1;
-  if(id >= 0 && id <= 150){
-      return res.status(200).send(pk[req.params.id - 1]);
+pokemon.get('/:id([0-9]{1,3})', async (req, res, next) =>{
+
+  const id = req.params.id;
+
+  if(id >= 0 && id <= 723){
+
+      const pkmn = await db.query("SELECT * FROM pokemon WHERE pok_id = "+id);
+      console.log(pkmn);
+      return res.status(200).json(pkmn);
 
   }
 
-    res.status(404).send("Pokémon no encontrado.");
+    return res.status(404).send("Pokémon no encontrado.");
 
 });
 
-pokemon.get('/:name([A-Za-z]+)', (req, res, next) =>{
+pokemon.get('/:name([A-Za-z]+)', async (req, res, next) =>{
 
   /*for (i=0; i<pokemon.length; i++){
     if(pokemon[i].name.toUpperCase() == name.toUpperCase()){
@@ -35,11 +41,9 @@ pokemon.get('/:name([A-Za-z]+)', (req, res, next) =>{
 
     };
 
-  };*/
+  };
 
   //Operador ternario if = condicion ? valor si verdadero : valor si falso
-
-  const name = req.params.name;
 
   const pkmn = pk.filter((p) => {
 
@@ -47,7 +51,20 @@ pokemon.get('/:name([A-Za-z]+)', (req, res, next) =>{
 
   });
 
-  return (pkmn.length>0) ? res.status(200).send(pkmn) : res.status(404).send('Pokémon no encontrado');
+  return (pkmn.length>0) ? res.status(200).send(pkmn) : res.status(404).send('Pokémon no encontrado');*/
+
+  const name = req.params.name;
+  const pkmn_name = await db.query("SELECT * FROM pokemon WHERE pok_name = '"+name+"'");
+
+  console.log(pkmn_name);
+
+  if(pkmn_name.length>0) {
+
+    return res.status(200).json(pkmn_name);
+
+  };
+
+  return res.status(404).send("Pokémon no encontrado.");
 
 
 });
