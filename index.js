@@ -12,7 +12,6 @@ app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended:true }));
 
-app.use("/pokemon", pokemon);
 
 /*
 Verbos HTTP: denotan una acción
@@ -29,11 +28,17 @@ app.get("/", (req, res, next) =>{
   //res respuesta clase objeto a la petición
 
   //const pokemon = pokedex.pokemon;
-  res.status(200).send("Bienvenido al Pokedex");
+  res.status(200).json({code: 1, message: "Bienvenido al Pokédex."});
 
 });
 
+app.use("/pokemon", pokemon);
 
+app.use((req, res, next) =>{
+
+  return res.status(404).json({code: 404, message: "URL no encontrada, verifique la URL"});
+
+});
 
 app.listen(process.env.PORT || 3000, ()=>{
 
