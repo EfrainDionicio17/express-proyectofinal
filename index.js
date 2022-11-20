@@ -2,12 +2,20 @@
 let y = 0; //y y z si pueden cambiar
 var z = ;*/
 
+//Dependencies
 const bodyParser = require('body-parser');
 const express = require('express'); //require es para importar
 const morgan = require('morgan');
 const app = express();
+
+//Router
 const pokemon = require('./routes/pokemon');
 const user = require('./routes/user');
+
+//Middleware
+const auth = require('./middleware/auth');
+const notfound = require('./middleware/notfound');
+const index = require('./middleware/index');
 
 app.use(morgan('dev'));
 app.use(express.json());
@@ -23,24 +31,15 @@ PUT: Actualizar todos los datos,
 DElETE: Eliminar un recurso o registro
 */
 
-app.get("/", (req, res, next) =>{
+app.get("/", index);
 
-  //req es la petición del navegador
-  //res respuesta clase objeto a la petición
-
-  //const pokemon = pokedex.pokemon;
-  res.status(200).json({code: 1, message: "Bienvenido al Pokédex."});
-
-});
-
-app.use("/pokemon", pokemon);
 app.use("/user", user);
 
-app.use((req, res, next) =>{
+app.use(auth);
 
-  return res.status(404).json({code: 404, message: "URL no encontrada, verifique la URL"});
+app.use("/pokemon", pokemon);
 
-});
+app.use(notfound);
 
 app.listen(process.env.PORT || 3000, ()=>{
 
