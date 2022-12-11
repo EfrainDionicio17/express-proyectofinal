@@ -9,7 +9,7 @@ const morgan = require('morgan');
 const app = express();
 
 //Router
-const pokemon = require('./routes/pokemon');
+const empleados = require('./routes/empleados');
 const user = require('./routes/user');
 
 //Middleware
@@ -41,7 +41,7 @@ app.use("/user", user);
 
 app.use(auth);
 
-app.use("/pokemon", pokemon);
+app.use("/empleados", empleados);
 
 app.use(notfound);
 

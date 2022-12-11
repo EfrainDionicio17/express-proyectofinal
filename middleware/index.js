@@ -4,6 +4,6 @@ module.exports = (req, res, next) =>{
   //res respuesta clase objeto a la petición
 
   //const pokemon = pokedex.pokemon;
-  res.status(200).json({code: 1, message: "Bienvenido al Pokédex."});
+  res.status(200).json({code: 1, message: "Bienvenido al Portal"});
 
 };
