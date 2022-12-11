@@ -16,7 +16,7 @@ function init(){
 
     }
 
-    loadPokemon();
+    loadEmpleados();
 
   } else {
 
@@ -48,7 +48,7 @@ function displayEmpleado(empleado){
 
   for(var i =0; i< empleado.length; i++) {
 
-    body.innerHTML += `<h3>${lista[i].nombre}</h3>`;
+    body.innerHTML += `<h3>${empleado[i].nombre}</h3>`;
 
   }
 

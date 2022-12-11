@@ -1,5 +1,5 @@
 const express = require('express');
-const emlpeados = express.Router();
+const empleados = express.Router();
 const db = require('../config/database');
 
 empleados.post("/", async (req,res,next)=>{
@@ -9,7 +9,7 @@ empleados.post("/", async (req,res,next)=>{
   if(nombre && apellidos && telefono && correo && direccion){
 
     let query = "INSERT INTO lista(nombre, apellidos, telefono, correo, direccion)";
-    query += ` VALUES('${nombre}',${apellidos}, ${telefono}, ${correo}, ${direccion})`;
+    query += ` VALUES('${nombre}','${apellidos}', '${telefono}', '${correo}', '${direccion}')`;
 
     const rows = await db.query(query);
 
@@ -53,8 +53,8 @@ empleados.put("/:id([0-9]{1,3})", async (req, res, next) => {
 
     if(nombre && apellidos && telefono && correo && direccion){
 
-      let query = `UPDATE lista SET nombre='${nombre}', apellidos=${apellidos},`;
-      query += `telefono=${telefono},correo=${correo}, direccion=${direccion} WHERE id_empleado=${req.params.id};`;
+      let query = `UPDATE lista SET nombre='${nombre}', apellidos='${apellidos}',`;
+      query += `telefono='${telefono}',correo='${correo}', direccion='${direccion}' WHERE id_empleado=${req.params.id};`;
 
       const rows = await db.query(query);
 
@@ -62,7 +62,7 @@ empleados.put("/:id([0-9]{1,3})", async (req, res, next) => {
 
       if (rows.affectedRows == 1) {
 
-          return res.status(200).json({code:200, message: "Pokemon actualizado correctamente."});
+          return res.status(200).json({code:200, message: "Empleado actualizado correctamente."});
 
       };
 
@@ -78,9 +78,9 @@ empleados.put("/:id([0-9]{1,3})", async (req, res, next) => {
 
 empleados.patch("/:id([0-9]{1,3})", async (req, res, next) => {
 
-  if(req.body.pok_name){
+  if(req.body.nombre){
 
-  let query = `UPDATE lista SET nombre='${req.body.nombre}' WHERE id_empleado=${req.params.id_empleado};`;
+  let query = `UPDATE lista SET nombre='${req.body.nombre}' WHERE id_empleado=${req.params.id};`;
 
   const rows = await db.query(query);
 
